@@ -12,3 +12,6 @@ def meow(num):
     for _ in range(num):
         print("meow")
 
+if __name__=="__main__":
+    main()
+
