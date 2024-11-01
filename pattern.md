@@ -1,7 +1,7 @@
  re.search(pattern, string, flags=0)
  
- .    | any character except newline
- \*    | zero or more of the preceding character
+ .    | any character except newline  
+ \*    | zero or more of the preceding character  
  \+    | one or more of the preceding character 
  ?    | zero or one of the preceding character
  {n}  | exactly n of the preceding character
