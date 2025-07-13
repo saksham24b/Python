@@ -10,74 +10,78 @@ from PyQt6.QtWidgets import(
     QVBoxLayout
 )
 
-#App Settings
-app = QApplication([])
-window = QWidget()
-window.setWindowTitle("Calcy")
-window.resize(250,300)
+class Calcy(QWidget):
+    def __init__(self):
+        super().__init__()
+        # App Settings
+        self.resize(250,300)
+        self.setWindowTitle("Calcy")
 
-#Objects
-text_box = QLineEdit()
-grid = QGridLayout()
+        # Objects
+        self.grid = QGridLayout()
+        self.text_box = QLineEdit()
 
-buttons = ["1", "2", "3", "/",
-           "4", "5", "6", "*",
-           "7", "8", "9", "-",
-           "0", ".", "=", "+"]
+        self.buttons = ["1", "2", "3", "/",
+                "4", "5", "6", "*",
+                "7", "8", "9", "-",
+                "0", ".", "=", "+"]
 
-clear = QPushButton("Clear")
-delete = QPushButton("<")
+        row = 0
+        col = 0
+        for text in self.buttons:
+            button = QPushButton(text)
+            button.clicked.connect(self.button_click)
+            self.grid.addWidget(button, row, col)
+            col += 1
+            if col > 3:
+                col = 0
+                row += 1
 
-def button_click():
-    button = app.sender()
-    text = button.text()
+        self.clear = QPushButton("Clear")
+        self.delete = QPushButton("<")
 
-    if text == "=":
-        symbol = text_box.text()
-        try:
-            res = eval(symbol)
-            text_box.setText(str(res))
-        except Exception as e:
-            print("Error: ", e)
-    
-    elif text == "Clear":
-        text_box.clear()
+        # Design
+        layout = QVBoxLayout()
+        layout.addWidget(self.text_box)
+        layout.addLayout(self.grid)
 
-    elif text == "<":
-        current_text = text_box.text()
-        text_box.setText(current_text[:-1])
+        erase_buttons = QHBoxLayout()
 
-    else:
-        current_value = text_box.text()
-        text_box.setText(current_value + text)
+        erase_buttons.addWidget(self.clear)
+        self.clear.clicked.connect(self.button_click)
 
-row = 0
-col = 0
-for text in buttons:
-    button = QPushButton(text)
-    button.clicked.connect(button_click)
-    grid.addWidget(button, row, col)
-    col+=1
-    if col>3:
-        col=0
-        row+=1
+        erase_buttons.addWidget(self.delete)
+        self.delete.clicked.connect(self.button_click)
 
-#Design
-layout = QVBoxLayout()
-layout.addWidget(text_box)
-layout.addLayout(grid)
+        layout.addLayout(erase_buttons)
+        window.setLayout(layout)
 
-erase_buttons = QHBoxLayout()
+    def button_click(self):
+        button = app.sender()
+        text = button.text()
 
-erase_buttons.addWidget(clear)
-clear.clicked.connect(button_click)
+        if text == "=":
+            symbol = self.text_box.text()
+            try:
+                res = eval(symbol)
+                self.text_box.setText(str(res))
+            except Exception as e:
+                print("Error: ", e)
 
-erase_buttons.addWidget(delete)
-delete.clicked.connect(button_click)
+        elif text == "Clear":
+            self.text_box.clear()
 
-layout.addLayout(erase_buttons)
-window.setLayout(layout)
+        elif text == "<":
+            current_text = self.text_box.text()
+            self.text_box.setText(current_text[:-1])
 
-#Show
-window.show()
-sys.exit(app.exec())
+        else:
+            current_value = self.text_box.text()
+            self.text_box.setText(current_value + text)
+
+
+if __name__ in "__main__":
+    app = QApplication([])
+    window = Calcy()
+    window.show()
+    sys.exit(app.exec())
