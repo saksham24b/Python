@@ -17,17 +17,17 @@ def extract_text(pdf_path):
     doc = fitz.open(pdf_path)
     all_text = ""
 
-    print(f"\n📄 Total pages: {len(doc)}")
+    print(f"\nTotal pages: {len(doc)}")
 
     for i, page in enumerate(doc):
-        print(f"\n🔍 Page {i+1}:")
+        print(f"\nPage {i+1}:")
 
         text = extract_text_from_page(page)
 
         if text.strip():
-            print("✅ Text found, extracting directly.")
+            print("Text found, extracting directly.")
         else:
-            print("🧠 No text found, using OCR...")
+            print("No text found, using OCR...")
             images = convert_from_path(pdf_path, first_page=i+1, last_page=i+1)
             text = ocr_page_image(images[0])
 
@@ -38,7 +38,7 @@ def extract_text(pdf_path):
 def save_output(text, output_path):
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(text)
-    print(f"\n📁 Extracted text saved to: {output_path}")
+    print(f"\nExtracted text saved to: {output_path}")
 
 def main():
     parser = argparse.ArgumentParser(description="Extract text from PDF (with OCR fallback).")
@@ -47,10 +47,10 @@ def main():
     args = parser.parse_args()
 
     if not os.path.exists(args.input):
-        print("❌ Error: PDF file not found.")
+        print("Error: PDF file not found.")
         return
 
-    print("🚀 Starting text extraction...")
+    print("Starting text extraction...")
     text = extract_text(args.input)
     save_output(text, args.output)
 
