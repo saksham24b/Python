@@ -1,5 +1,4 @@
 import sys
-from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import(
     QApplication,
     QWidget,
@@ -9,28 +8,44 @@ from PyQt6.QtWidgets import(
     QHBoxLayout,
     QVBoxLayout
 )
+from PyQt6.QtGui import QFont
 
 class Calcy(QWidget):
     def __init__(self):
         super().__init__()
         # App Settings
-        self.resize(250,300)
+        self.resize(280,280)
         self.setWindowTitle("Calcy")
 
         # Objects
         self.grid = QGridLayout()
+        self.grid
         self.text_box = QLineEdit()
+        self.text_box.setFont(QFont("Helvetica", 30))
+        self.text_box.setStyleSheet("QLineEdit {color: white;}")
 
         self.buttons = ["1", "2", "3", "/",
-                "4", "5", "6", "*",
-                "7", "8", "9", "-",
-                "0", ".", "=", "+"]
+                        "4", "5", "6", "*",
+                        "7", "8", "9", "-",
+                        "0", ".", "=", "+"]
 
         row = 0
         col = 0
         for text in self.buttons:
             button = QPushButton(text)
             button.clicked.connect(self.button_click)
+            button.setStyleSheet("""
+                                 QPushButton {
+                                 font: 20pt; 
+                                 padding: 10px; 
+                                 color: white;
+                                 background: #353935;
+                                 border-radius: 5px;
+                                 }
+                                 QPushButton:pressed{
+                                 background: grey;
+                                 }"""
+                                 )
             self.grid.addWidget(button, row, col)
             col += 1
             if col > 3:
@@ -39,6 +54,27 @@ class Calcy(QWidget):
 
         self.clear = QPushButton("Clear")
         self.delete = QPushButton("<")
+        self.clear.setStyleSheet("""
+                                 QPushButton {
+                                 font: 20pt Comic Sans MS; 
+                                 padding: 10px; 
+                                 color: black;
+                                 background: #FFC300;
+                                 border-radius: 12px;
+                                 }
+                                 QPushButton:pressed{
+                                 background: #FAFAD2}""")
+        self.delete.setStyleSheet("""
+                                  QPushButton {
+                                  font: 20pt Comic Sans MS; 
+                                  padding: 10px; 
+                                  color: black;
+                                  background: #FFC300;
+                                  border-radius: 12px;
+                                  }
+                                  QPushButton:pressed{
+                                  background: #FAFAD2;}"""
+                                  )
 
         # Design
         layout = QVBoxLayout()
@@ -46,7 +82,6 @@ class Calcy(QWidget):
         layout.addLayout(self.grid)
 
         erase_buttons = QHBoxLayout()
-
         erase_buttons.addWidget(self.clear)
         self.clear.clicked.connect(self.button_click)
 
@@ -54,7 +89,8 @@ class Calcy(QWidget):
         self.delete.clicked.connect(self.button_click)
 
         layout.addLayout(erase_buttons)
-        window.setLayout(layout)
+        layout.setContentsMargins(25,25,25,25)
+        self.setLayout(layout)
 
     def button_click(self):
         button = app.sender()
@@ -83,5 +119,6 @@ class Calcy(QWidget):
 if __name__ in "__main__":
     app = QApplication([])
     window = Calcy()
+    window.setStyleSheet("QWidget {background: black;}")
     window.show()
     sys.exit(app.exec())
